@@ -5,11 +5,6 @@ let http = require('http')
 let fs = require('fs')
 
 let server = http.createServer((req, res) => {
-	if (!req.url.match(/^[a-zA-Z0-9-_.\/]+$/) || req.url.includes('..')) {
-		res.statusCode = 403
-		return res.end('Nope')
-	}
-
 	let filename = __dirname + req.url
 
 	fs.readFile(filename, (err, file) => {

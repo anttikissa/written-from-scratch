@@ -16,13 +16,35 @@ We'll need a server to display our little app in browser (and, eventually, other
 devices). For that we write the simplest possible http server that can serve
 HTML and JavaScript files:
 
-[server.js]
+[1/server.js]
 
 Run the server by saying 'node server.js', and you should be able to see the
 canvas by navigating to http://localhost:1234/1/1.html.
 
 [[1/1.html]]
 
-(As it often goes with the simplest possible things, the server contains a
-security hole: if you create a file 'secret.txt' in the parent directory and try
-to fetch '../secret.txt', the server will happily fetch it.)
+As it often goes with the simplest possible things, this server contains
+a security hole. If you create a file 'secret.txt' in the parent
+directory and try to fetch '../secret.txt' (a browser won't probably
+allow it, but a tool like HTTPie (https://httpie.org/) will), the server
+will happily serve it. Hope you didn't try this out on a production
+server yet!
+
+Let's patch this hole by restricting our file paths to only contain alphanumeric
+characters, numbers, and the characters `/.-_`. We will also explicitly forbid
+the character sequence '..'.
+
+```
+let server = http.createServer((req, res) => {
+	if (!req.url.match(/^[a-zA-Z0-9-_.\/]+$/) || req.url.includes('..')) {
+		res.statusCode = 403
+		return res.end('Nope')
+	}
+
+	/* rest of the server */
+})
+```
+
+That should do it! (The server will still happily serve itself (`/server.js`),
+and whatever other files exist in your directory. The reader will have to decide
+if this level of security is satisfactory.)
