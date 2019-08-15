@@ -1,0 +1,11 @@
+{
+  "name": "written-from-scratch",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Antti Kissaniemi <antti.kissaniemi@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2"
+  }
+}
