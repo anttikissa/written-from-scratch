@@ -1,0 +1,28 @@
+Our first task is to create a canvas that has the proper size for our
+viewport.
+
+Let's start with a simple html document:
+
+[1/1.html]
+
+It includes a script that creates a canvas and appends it to the document:
+
+[1/1.js]
+
+The <style> element guarantees that we also see where the canvas is, since
+we're not yet drawing anything to it.
+
+We'll need a server to display our little app in browser (and, eventually, other
+devices). For that we write the simplest possible http server that can serve
+HTML and JavaScript files:
+
+[server.js]
+
+Run the server by saying 'node server.js', and you should be able to see the
+canvas by navigating to http://localhost:1234/1/1.html.
+
+[[1/1.html]]
+
+(As it often goes with the simplest possible things, the server contains a
+security hole: if you create a file 'secret.txt' in the parent directory and try
+to fetch '../secret.txt', the server will happily fetch it.)
