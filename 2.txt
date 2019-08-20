@@ -1,0 +1,80 @@
+Let's implement a programming language!
+
+We'll start with a program that takes some input and some machine code that
+operates on this input. We call this program _the machine_.
+
+The input, as well as the machine code, will live in a sequence of slots that
+each fit one 32-bit signed number, called _a word_. This sequence of words is
+called _the memory_.
+
+The first memory slot is called $0 (to distinguish it from the regular number
+zero), the second slot $1, and so on. We can also speak of the "address" of a
+memory slot, which is simply a number. The address of the slot $0 is 0, the
+address of slot $1 is 1, and so on.
+
+The machine code consists of _instructions_, which the machine executes in
+sequence. Every instruction has:
+
+- _a name_, which is actually a number that is used to represent the instruction
+  in the memory
+- one or more _operands_, all of which correspond to a memory slot
+
+Our instruction set will at first consist of a few basic arithmetic operations,
+plus a special operation 'hlt' that stops the program and produces a numeric
+result that the machine will print out.
+
+instruction  name  operands          explanation
+hlt             0  input             halt execution (and return 'input')
+add             1  target, lhs, rhs  set 'target' to 'lhs' + 'rhs'
+sub             2  target, lhs, rhs  set 'target' to 'lhs' - 'rhs'
+mul             3  target, lhs, rhs  set 'target' to 'lhs' * 'rhs'
+div             4  target, lhs, rhs  set 'target' to 'lhs' / 'rhs'
+
+To write a program that adds the numbers 200 and 300, divides the result by 100,
+and then returns the result to the user, we would write the following machine
+code:
+
+Program 1. Demonstrate addition, division, and halt.
+
+slot    content        explanation
+$0      0              placeholder for the result
+$1      200            input for addition
+$2      300            another input for addition
+$3      100            input for division
+$4      1              name of "add" instruction
+$5      0              first operand to "add" (target address)
+$6      1              second operand to "add" (lhs address)
+$7      2              third operand to "add" (rhs address)
+$8      4              name of "div" instruction
+$9      0              first operand to "div" (target address)
+$10     0              second operand to "div" (lhs address)
+$11     3              third operand to "div" (rhs address)
+$12     0              name of "hlt" instruction
+$13     0              operand to "hlt" instruction (input address)
+
+Now we only have to keep in mind that the machine must start executing the
+instructions at address 4. To avoid hardcoding the start address, we give it as
+an (optional, defaulting to 0) argument to the machine.
+
+How do we represent the program as a file? To keep things as readable as
+possible, we choose a textual representation: the program and its input are
+represented by the initial memory contents of the program. Memory slots are
+represented by an ASCII representation of the number contained in the slot,
+separated by white space.
+
+Here is the program in raw machine code (.mc stands for machine code):
+
+[program1.mc]
+
+And the machine that supports precisely this program is here:
+
+[machine1.js]
+
+To run it:
+
+    node machine1.js program1.mc 4
+
+The result should be:
+
+    5
+
